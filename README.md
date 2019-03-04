@@ -5,10 +5,13 @@ Main app is coded in R in the app.R file
 shiny
 dplyr
 DT
+ggplot2
+
 <br>
 Reading 2019_03_03_Hatboro
 
 
-Last UPDATED March 3, 2019 <br>
-2:25pm
+Last UPDATED March 4, 2019 <br>
+2:15pm <br>
+v1.3
 
