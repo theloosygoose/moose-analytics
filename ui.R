@@ -2,6 +2,9 @@ library(shiny)
 library(ggplot2)
 library(DT)
 library(dplyr)
+library(scales)
+library(tibble)
+#library(plotly)
 
 
 ui <- fluidPage(
@@ -11,7 +14,19 @@ ui <- fluidPage(
   textInput(
     inputId ="robot_numSearch", label = "Choose a team"),
   tabsetPanel(
-    tabPanel("Robot Numerical Data",
+    
+    tabPanel("Team Summary",
+      fluidRow(
+        column(3,
+          tags$h1(textOutput("robot_num"))
+        )
+      )
+    ),
+  ###################
+## RAW NUM DATA TAB ##
+ ###################
+    
+    tabPanel("Robot Raw Numerical Data",
       fluidRow(
         tags$h1("Misc."),
         column(4,
@@ -105,25 +120,52 @@ ui <- fluidPage(
 
     ),
 
+  ########################
+## CHARTS AND GRAPHS TAB ##
+  #######################
 
     tabPanel("Charts and Graphs",
       # GRAPHS FOR AUTONOMOUS ALL Are 3/12 columns wide and are 400x400px
-        tags$h1("Sandstorm"),
-
+        tags$h1("Sandstorm:"),
         fluidRow(
-
-          column(3,
+          column(4,
+            tags$h3("CargoShip Hatch"),
             plotOutput("A_cargoShip_Hatch_Line", width = "400px", height = "400px")
           ),
-          column(3,
+          column(4,
+            tags$h3("CargoShip Cargo"),
             plotOutput("A_cargoShip_Cargo_Line", width = "400px", height = "400px")
           )
 
+        ),
+        tags$h1("Tele-Op:"),
+        fluidRow(
+          column(6,
+            tags$h3("Rocket Total Hatch"),
+            plotOutput("rocket_Hatch_Plot_total", width = "400px", height = "400px")
+          ),
+          column(6,
+            tags$h3("Rocket Total Cargo"),
+            plotOutput("rocket_Cargo_Plot_total", width = "400px", height = "400px")
+          ),
+          column(6,
+            tags$h3("CargoShip Total Hatch"),
+            plotOutput("cargoship_Hatch_Plot_total", width = "400px", height = "400px")
+          ),
+          column(6,
+            tags$h3("CargoShip Total Cargo"),
+            plotOutput("cargoship_Cargo_Plot_total", width = "400px", height = "400px")
+          )
         )
+
       ),
+  ###################
+##  FREQUENCIES TAB   ##
+  ###################
+
       tabPanel("Frequencies",
-        #Displaying frequencies for Hatch Panels vs 
-        
+        #Displaying frequencies for Hatch Panels vs
+
         fluidRow(
           column(4,
             tags$h1("Hatch Panels vs Total Times"),
@@ -133,17 +175,26 @@ ui <- fluidPage(
             tags$h1("Cargo Ball vs Total Times"),
             verbatimTextOutput("Cargo_over_total_freq")
           )
-          
+
         ),
         fluidRow(
           column(4,
-                tags$h1("Starting Location"),
-                textOutput("Start_Location")
+            tags$h1("Starting Location"),
+            textOutput("Start_Location")
           )
-        
+        )
+      ),
+      tabPanel("Event Summary",
+        fluidRow(
+          column(4,
+            verbatimTextOutput("event_skill_summary")
+          ),
+          column(4,
+            plotOutput("event_skill_summary_plot")
+          )
         )
       )
-    
+      
     )
   )
 
