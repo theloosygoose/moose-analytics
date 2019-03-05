@@ -192,7 +192,52 @@ ui <- fluidPage(
             plotOutput("event_skill_summary_plot")
           )
         )
-      )
+      ),
+        tabPanel("Regression",
+         fluidRow(
+           splitLayout(
+                  textInput(
+                    inputId ="ahatch_1lvl_in", label = "Amount of Autonomous Rocket Level 1 Cargo", value = 0),
+                  textInput(
+                    inputId ="acargo_cs_in", label = "Amount of Autonomous Cargo Ship Cargo", value = 0),
+                  textInput(
+                    inputId ="ahatch_cs_in", label = "Amount of Autonomous Cargo Ship Hatch", value = 0),
+                  textInput(
+                    inputId ="cargo_1lvl_in", label = "Amount of Rocket Level 1 Cargo", value = 0),  
+                  textInput(
+                      inputId ="cargo_2lvl_in", label = "Amount of Rocket Level 2 Cargo", value = 0)
+                  
+                  
+           ), 
+           splitLayout(
+                  textInput(
+                    inputId ="cargo_3lvl_in", label = "Amount of Rocket Level 3 Cargo", value = 0),
+                  textInput(
+                    inputId ="hatch_1lvl_in", label = "Amount of Rocket Level 1 Hatch", value = 0),
+                  textInput(
+                    inputId ="hatch_2lvl_in", label = "Amount of Rocket Level 2 Hatch", value = 0),
+                  textInput(
+                    inputId ="hatch_3lvl_in", label = "Amount of Rocket Level 3 Hatch", value = 0),
+                  textInput(
+                    inputId ="cargo_cs_in", label = "Amount of Cargo Ship Cargo", value = 0),
+                  textInput(
+                    inputId ="hatch_cs_in", label = "Amount of Cargo Ship Hatch", value = 0),
+                  textInput(
+                    inputId ="defense_", label = "Defense", value = 0)
+           )
+                  
+         ),
+         fluidRow(
+           column(12,
+                  tags$h1("Linear Regression for Match Success"),
+                  verbatimTextOutput("total_w_l_corr")
+           )
+           
+           
+           
+           
+         )
+)
       
     )
   )

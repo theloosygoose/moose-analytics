@@ -208,5 +208,16 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
     ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Defense_Avg)) + geom_point(aes(size=Defense_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
     
   })
+  output$total_w_l_corr <- renderPrint ({
+    
+    mylogit <- glm(W_L ~ C_on_3_Lev + C_on_2_Lev + C_on_1_Lev + CS_C + CS_H + A_H_on_1_Lev + A_CS_H + H_on_3_Lev + H_on_2_Lev + H_on_1_Lev + Defense, data = df, family = "binomial")
+    c3 <- as.integer(input$cargo_3lvl_in)
+    c2 <- as.integer(input$cargo_2lvl_in)
+    c1 <- as.integer(input$cargo_1lvl_in)
+    x <- data.frame(C_on_3_Lev = c3, C_on_2_Lev = c2, C_on_1_Lev = c1, CS_C = as.integer(input$cargo_cs_in), CS_H = as.integer(input$hatch_cs_in), A_H_on_1_Lev = as.integer(input$ahatch_1lvl_in), A_CS_H = as.integer(input$ahatch_cs_in), H_on_3_Lev = as.integer(input$hatch_3lvl_in), H_on_2_Lev = as.integer(input$hatch_2lvl_in), H_on_1_Lev = as.integer(input$hatch_1lvl_in), Defense = as.integer(input$defense_) )
+    p<- predict(mylogit,x)
+    p
+   # c(input$cargo_3lvl_in, input$cargo_2lvl_in, input$cargo_1lvl_in, input$cargo_cs_in, input$hatch_cs_in, input$ahatch_1lvl_in, input$ahatch_cs_in, input$hatch_3lvl_in, input$hatch_2lvl_in, input$hatch_1lvl_in, input$defense_)
+  })
   
 }
