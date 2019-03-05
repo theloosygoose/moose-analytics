@@ -7,6 +7,7 @@ library(tibble)
 
 
 server <- function(input, output){
+
 df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
 
 ##MAKING NEW COLUMNS IN THE DATAFRAME
@@ -177,6 +178,16 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
     matchesLen <- r1 + c1 + l1 + l2 + r2
     paste(c("L1: "), c(round((l1/matchesLen)*100, digits = 2)) , c("% || C1: ") , c(round((c1/matchesLen)*100, digits = 2)) , c("% || R1: ") , c(round((r1/matchesLen)*100, digits = 2)), c("% || L2: ") , c(round((l2/matchesLen)*100, digits = 2)) , c("% || R2: "), c(round((r2/matchesLen)*100, digits = 2)), c("%."), sep = "")
   })
+  
+  output$End_Location <- renderPrint ({
+    endloc_df <- df[grep(input$robot_numSearch, df$Robot_Num), c(3,26)]
+
+    matchesLen <- r1 + c1 + l1 + l2 + r2
+    paste(c("L1: "), c(round((l1/matchesLen)*100, digits = 2)) , c("% || C1: ") , c(round((c1/matchesLen)*100, digits = 2)) , c("% || R1: ") , c(round((r1/matchesLen)*100, digits = 2)), c("% || L2: ") , c(round((l2/matchesLen)*100, digits = 2)) , c("% || R2: "), c(round((r2/matchesLen)*100, digits = 2)), c("%."), sep = "")
+  })
+  
+  
+  
 
   ###################
 ## ROBOT SUMMARY TAB ##
@@ -194,7 +205,7 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
   })
   
   output$event_skill_summary_plot <- renderPlot({
-    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team)) + geom_point() +geom_text(aes(label=Team),hjust=0, vjust=0)
+    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Defense_Avg)) + geom_point(aes(size=Defense_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
     
   })
   

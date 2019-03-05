@@ -8,7 +8,6 @@ library(tibble)
 
 
 ui <- fluidPage(
-  tags$link(rel = "stylesheet", type = "text/css", href = "www/main.css"),
   tags$h1("moose analytics"),
 
   textInput(
