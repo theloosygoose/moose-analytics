@@ -1,7 +1,0 @@
-////TASKS FOR mooseanalysis\\\\
-
-||Statistic Equasions||
-
-	Percentile
-	  Find the team's percentile for thier scores
-
