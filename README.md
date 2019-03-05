@@ -1,14 +1,17 @@
 <h2>Moose Analytics</h2> is a webapp created with R Shiny to show graphs and different data analytic function.
 Main app is coded in R in the server.R and ui.R <br>
 
-<b>PACKAGES</b>
-shiny
-dplyr
-DT
-ggplot2
+<b>PACKAGES</b> <br>
+
+library(shiny) <br>
+library(ggplot2) <br>
+library(DT) <br>
+library(dplyr) <br>
+library(scales)<br>
+library(tibble) <br>
 
 <br>
-Reading 2019_03_03_Hatboro
+Reading: 2019_03_03_Hatboro
 
 
 Last UPDATED March 5, 2019 <br>
