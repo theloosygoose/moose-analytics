@@ -16,8 +16,8 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
   df$H_total <- df$H_on_3_Lev + df$H_on_2_Lev + df$H_on_1_Lev + df$CS_H
   #TOTAL CARGO 33
   df$C_total <- df$C_on_3_Lev + df$C_on_2_Lev + df$C_on_1_Lev + df$CS_C
-  
-  
+
+
   #Taking Means of Total Cargo
   summary_df <- aggregate(cbind(df$C_total, df$H_total,df$Defense), by=list(Category=df$Robot_Num), FUN=mean)
   names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg")
@@ -167,7 +167,7 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
     finaldata <- select(newdf, -c(2,3,4,5,6,7,8,9))
     finaldata
   })
-
+#Starting location Freq
   output$Start_Location <- renderPrint ({
     tblofstrt <- df[grep(input$robot_numSearch, df$Robot_Num), c(3,5)]
     r1 <- length(which(tblofstrt == "1R"))
@@ -178,16 +178,17 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
     matchesLen <- r1 + c1 + l1 + l2 + r2
     paste(c("L1: "), c(round((l1/matchesLen)*100, digits = 2)) , c("% || C1: ") , c(round((c1/matchesLen)*100, digits = 2)) , c("% || R1: ") , c(round((r1/matchesLen)*100, digits = 2)), c("% || L2: ") , c(round((l2/matchesLen)*100, digits = 2)) , c("% || R2: "), c(round((r2/matchesLen)*100, digits = 2)), c("%."), sep = "")
   })
-  
+
+#endlocaltion Freq
   output$End_Location <- renderPrint ({
     endloc_df <- df[grep(input$robot_numSearch, df$Robot_Num), c(3,26)]
 
     matchesLen <- r1 + c1 + l1 + l2 + r2
     paste(c("L1: "), c(round((l1/matchesLen)*100, digits = 2)) , c("% || C1: ") , c(round((c1/matchesLen)*100, digits = 2)) , c("% || R1: ") , c(round((r1/matchesLen)*100, digits = 2)), c("% || L2: ") , c(round((l2/matchesLen)*100, digits = 2)) , c("% || R2: "), c(round((r2/matchesLen)*100, digits = 2)), c("%."), sep = "")
   })
-  
-  
-  
+
+
+
 
   ###################
 ## ROBOT SUMMARY TAB ##
@@ -203,21 +204,25 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
   output$event_skill_summary <- renderPrint({
     summary_df
   })
-  
+
   output$event_skill_summary_plot <- renderPlot({
     ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Defense_Avg)) + geom_point(aes(size=Defense_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
-    
+
   })
+
+    ################
+  ## PREDICTION TAB ##
+    ################
   output$total_w_l_corr <- renderPrint ({
-    
     mylogit <- glm(W_L ~ C_on_3_Lev + C_on_2_Lev + C_on_1_Lev + CS_C + CS_H + A_H_on_1_Lev + A_CS_H + H_on_3_Lev + H_on_2_Lev + H_on_1_Lev + Defense, data = df, family = "binomial")
     c3 <- as.integer(input$cargo_3lvl_in)
     c2 <- as.integer(input$cargo_2lvl_in)
     c1 <- as.integer(input$cargo_1lvl_in)
+    
     x <- data.frame(C_on_3_Lev = c3, C_on_2_Lev = c2, C_on_1_Lev = c1, CS_C = as.integer(input$cargo_cs_in), CS_H = as.integer(input$hatch_cs_in), A_H_on_1_Lev = as.integer(input$ahatch_1lvl_in), A_CS_H = as.integer(input$ahatch_cs_in), H_on_3_Lev = as.integer(input$hatch_3lvl_in), H_on_2_Lev = as.integer(input$hatch_2lvl_in), H_on_1_Lev = as.integer(input$hatch_1lvl_in), Defense = as.integer(input$defense_) )
     p<- predict(mylogit,x)
-    p
-   # c(input$cargo_3lvl_in, input$cargo_2lvl_in, input$cargo_1lvl_in, input$cargo_cs_in, input$hatch_cs_in, input$ahatch_1lvl_in, input$ahatch_cs_in, input$hatch_3lvl_in, input$hatch_2lvl_in, input$hatch_1lvl_in, input$defense_)
+    paste(round(p*100, digits = 2), "% chance of winning", sep = "")
+       # c(input$cargo_3lvl_in, input$cargo_2lvl_in, input$cargo_1lvl_in, input$cargo_cs_in, input$hatch_cs_in, input$ahatch_1lvl_in, input$ahatch_cs_in, input$hatch_3lvl_in, input$hatch_2lvl_in, input$hatch_1lvl_in, input$defense_)
   })
-  
+
 }

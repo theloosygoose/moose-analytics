@@ -197,7 +197,7 @@ ui <- fluidPage(
          fluidRow(
            splitLayout(
                   textInput(
-                    inputId ="ahatch_1lvl_in", label = "Amount of Autonomous Rocket Level 1 Cargo", value = 0),
+                    inputId ="ahatch_1lvl_in", label = "Amount of Autonomous Rocket Level 1 Hatch", value = 0),
                   textInput(
                     inputId ="acargo_cs_in", label = "Amount of Autonomous Cargo Ship Cargo", value = 0),
                   textInput(
