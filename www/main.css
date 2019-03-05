@@ -1,0 +1,46 @@
+html, body{margin:0px; padding:0px;}
+
+body{
+  margin: 0px;
+  color: black;
+  padding: 0px;
+}
+
+header{
+  text-align: center;
+  font-size: 90px;
+  color: white;
+  background-color: #fe465b;
+  margin:0px;
+  margin-bottom: 50px;
+}
+
+#robot_numSearch {
+  margin-bottom: 50px;
+  justify-content: center;
+  text-align: center;
+}
+
+img {
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.container-fluid{
+  margin-bottom: 100px;
+  padding: 0px;
+
+}
+
+.tabbable {
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+.main_search .shiny-bound-input{
+  padding: 20px;
+  font-size: 20px;
+}
+h2 {
+  padding-bottom: 10px;
+}

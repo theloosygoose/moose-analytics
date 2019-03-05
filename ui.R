@@ -4,16 +4,12 @@ library(DT)
 library(dplyr)
 library(scales)
 library(tibble)
-#library(plotly)
 
-
-ui <- fluidPage(
-  tags$h1("moose analytics"),
-
-  textInput(
-    inputId ="robot_numSearch", label = "Choose a team"),
+ui <- fluidPage(theme = "main.css",
+  tags$header(tags$img(src ="logo/logo.png", height ='200px;')),
+  tags$div(class ="main_search",textInput(inputId ="robot_numSearch", label = "Choose a team")),
   tabsetPanel(
-    
+
     tabPanel("Team Summary",
       fluidRow(
         column(3,
@@ -21,10 +17,11 @@ ui <- fluidPage(
         )
       )
     ),
+
   ###################
 ## RAW NUM DATA TAB ##
  ###################
-    
+
     tabPanel("Robot Raw Numerical Data",
       fluidRow(
         tags$h1("Misc."),
@@ -50,7 +47,7 @@ ui <- fluidPage(
           verbatimTextOutput("endpoint_Text")
         )
       ),
-
+      tags$hr(),
       fluidRow(
         tags$h1("Sandstorm:"),
 
@@ -63,7 +60,7 @@ ui <- fluidPage(
           verbatimTextOutput("A_cargoShip_Hatch_Text")
         )
       ),
-
+      tags$hr(),
       fluidRow(
         tags$h1("Tele-op:"),
 
@@ -85,7 +82,7 @@ ui <- fluidPage(
           verbatimTextOutput("cargoship_Hatch_Text_total")
         )
       ),
-
+      tags$hr(),
       fluidRow(
         tags$h1("Cargo Pickup"),
 
@@ -102,6 +99,7 @@ ui <- fluidPage(
           verbatimTextOutput("LS_Cargo_Text")
         )
        ),
+       tags$hr(),
       fluidRow(
         tags$h1("Hatch Pickup"),
 
@@ -183,62 +181,69 @@ ui <- fluidPage(
           )
         )
       ),
+
+      ###############
+    ## EVENT SUMMARY ##
+      ###############
       tabPanel("Event Summary",
         fluidRow(
           column(4,
+            tags$h2("All Event Team Averages"),
             verbatimTextOutput("event_skill_summary")
           ),
-          column(4,
+          column(8,
             plotOutput("event_skill_summary_plot")
           )
         )
       ),
-        tabPanel("Regression",
-         fluidRow(
-           splitLayout(
-                  textInput(
-                    inputId ="ahatch_1lvl_in", label = "Amount of Autonomous Rocket Level 1 Hatch", value = 0),
-                  textInput(
-                    inputId ="acargo_cs_in", label = "Amount of Autonomous Cargo Ship Cargo", value = 0),
-                  textInput(
-                    inputId ="ahatch_cs_in", label = "Amount of Autonomous Cargo Ship Hatch", value = 0),
-                  textInput(
-                    inputId ="cargo_1lvl_in", label = "Amount of Rocket Level 1 Cargo", value = 0),  
-                  textInput(
-                      inputId ="cargo_2lvl_in", label = "Amount of Rocket Level 2 Cargo", value = 0)
-                  
-                  
-           ), 
-           splitLayout(
-                  textInput(
-                    inputId ="cargo_3lvl_in", label = "Amount of Rocket Level 3 Cargo", value = 0),
-                  textInput(
-                    inputId ="hatch_1lvl_in", label = "Amount of Rocket Level 1 Hatch", value = 0),
-                  textInput(
-                    inputId ="hatch_2lvl_in", label = "Amount of Rocket Level 2 Hatch", value = 0),
-                  textInput(
-                    inputId ="hatch_3lvl_in", label = "Amount of Rocket Level 3 Hatch", value = 0),
-                  textInput(
-                    inputId ="cargo_cs_in", label = "Amount of Cargo Ship Cargo", value = 0),
-                  textInput(
-                    inputId ="hatch_cs_in", label = "Amount of Cargo Ship Hatch", value = 0),
-                  textInput(
-                    inputId ="defense_", label = "Defense", value = 0)
-           )
-                  
+      ###############
+    ## REGRESSION TAB ##
+      ###############
+      tabPanel("Regression",
+       fluidRow(
+         splitLayout(
+                textInput(
+                  inputId ="ahatch_1lvl_in", label = "Amount of Autonomous Rocket Level 1 Hatch", value = 0),
+                textInput(
+                  inputId ="acargo_cs_in", label = "Amount of Autonomous Cargo Ship Cargo", value = 0),
+                textInput(
+                  inputId ="ahatch_cs_in", label = "Amount of Autonomous Cargo Ship Hatch", value = 0),
+                textInput(
+                  inputId ="cargo_1lvl_in", label = "Amount of Rocket Level 1 Cargo", value = 0),
+                textInput(
+                    inputId ="cargo_2lvl_in", label = "Amount of Rocket Level 2 Cargo", value = 0)
+
+
          ),
-         fluidRow(
-           column(12,
-                  tags$h1("Linear Regression for Match Success"),
-                  verbatimTextOutput("total_w_l_corr")
-           )
-           
-           
-           
-           
+         splitLayout(
+                textInput(
+                  inputId ="cargo_3lvl_in", label = "Amount of Rocket Level 3 Cargo", value = 0),
+                textInput(
+                  inputId ="hatch_1lvl_in", label = "Amount of Rocket Level 1 Hatch", value = 0),
+                textInput(
+                  inputId ="hatch_2lvl_in", label = "Amount of Rocket Level 2 Hatch", value = 0),
+                textInput(
+                  inputId ="hatch_3lvl_in", label = "Amount of Rocket Level 3 Hatch", value = 0),
+                textInput(
+                  inputId ="cargo_cs_in", label = "Amount of Cargo Ship Cargo", value = 0),
+                textInput(
+                  inputId ="hatch_cs_in", label = "Amount of Cargo Ship Hatch", value = 0),
+                textInput(
+                  inputId ="defense_", label = "Defense", value = 0)
+         )
+
+       ),
+       fluidRow(
+         column(12,
+                tags$h1("Linear Regression for Match Success"),
+                verbatimTextOutput("total_w_l_corr")
+          )
+
+
+
+
          )
 )
-      
+
     )
   )
-
