@@ -1,5 +1,5 @@
 <h1>Moose Analytics v1.0</h1>
-<h4>Graphical Update and <i>Release</i></h4>
+<h4>Graphical Update and Major Launch - 3.6.2019</h4>
 <hr>
 A webapp created with R Shiny to show graphs and different data analytic function.
 Main app is coded in R in the ui.R file and the server.R files
