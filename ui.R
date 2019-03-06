@@ -4,16 +4,21 @@ library(DT)
 library(dplyr)
 library(scales)
 library(tibble)
+library(fmsb)
 
 ui <- fluidPage(theme = "main.css",
-  tags$header(tags$img(src ="logo/logo.png", height ='200px;')),
-  tags$div(class ="main_search",textInput(inputId ="robot_numSearch", label = "Choose a team")),
-  tabsetPanel(
+  tags$header(tags$img(src ="logo/logo.png", height ='150px;'),
+  tags$div(class ="main_search",textInput(inputId ="robot_numSearch", label = "Team Number:"))
+),
 
+  tabsetPanel(
+      ##################
+    ## TEAM SUMMARY TAB ##
+      ##################
     tabPanel("Team Summary",
       fluidRow(
-        column(3,
-          tags$h1(textOutput("robot_num"))
+        column(7,
+          tags$h1(class='team_sum_header', textOutput("robot_num"))
         )
       )
     ),
@@ -164,20 +169,24 @@ ui <- fluidPage(theme = "main.css",
         #Displaying frequencies for Hatch Panels vs
 
         fluidRow(
-          column(4,
+          column(6,
             tags$h1("Hatch Panels vs Total Times"),
             verbatimTextOutput("Hatch_over_total_freq")
           ),
-          column(4,
+          column(6,
             tags$h1("Cargo Ball vs Total Times"),
             verbatimTextOutput("Cargo_over_total_freq")
           )
 
         ),
         fluidRow(
-          column(4,
+          column(6,
             tags$h1("Starting Location"),
             textOutput("Start_Location")
+          ),
+          column(6,
+          tags$h1("Ending Location"),
+          textOutput("End_Location")
           )
         )
       ),

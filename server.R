@@ -4,14 +4,16 @@ library(DT)
 library(dplyr)
 library(scales)
 library(tibble)
+library(fmsb)
 
 
 server <- function(input, output){
 
-df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
+df <-read.csv(file = "event_data/2019_03_03_HatboroEvent.csv", header = TRUE)
+
+df[df=="?"] <- 0
 
 ##MAKING NEW COLUMNS IN THE DATAFRAME
-
   ##TOTAL HATCHES 32
   df$H_total <- df$H_on_3_Lev + df$H_on_2_Lev + df$H_on_1_Lev + df$CS_H
   #TOTAL CARGO 33
@@ -19,8 +21,12 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
 
 
   #Taking Means of Total Cargo
-  summary_df <- aggregate(cbind(df$C_total, df$H_total,df$Defense), by=list(Category=df$Robot_Num), FUN=mean)
-  names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg")
+  summary_df <- aggregate(cbind(df$C_total, df$H_total,df$Defense, df$End_Point), by=list(Category=df$Robot_Num), FUN=mean)
+
+  names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg","Endgame_Avg")
+
+  summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
+
  ################################
 ## MISC. INFORMATION ABOUT ROBOT ##
   ###############################
@@ -181,11 +187,15 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
 
 #endlocaltion Freq
   output$End_Location <- renderPrint ({
-    endloc_df <- df[grep(input$robot_numSearch, df$Robot_Num), c(3,26)]
+    endloc_df <- df[grep(input$robot_numSearch, df$Robot_Num), c(29)]
+    lv_0 <- length(which(endloc_df == 0))
+    lv_1 <- length(which(endloc_df == 1))
+    lv_2 <- length(which(endloc_df == 2))
+    lv_3 <- length(which(endloc_df == 3))
+    matchesLen <- lv_0 + lv_1 +lv_2 + lv_3
 
-    matchesLen <- r1 + c1 + l1 + l2 + r2
-    paste(c("L1: "), c(round((l1/matchesLen)*100, digits = 2)) , c("% || C1: ") , c(round((c1/matchesLen)*100, digits = 2)) , c("% || R1: ") , c(round((r1/matchesLen)*100, digits = 2)), c("% || L2: ") , c(round((l2/matchesLen)*100, digits = 2)) , c("% || R2: "), c(round((r2/matchesLen)*100, digits = 2)), c("%."), sep = "")
-  })
+    paste(c("Level 0: "), c(round((lv_0/matchesLen)*100, digits = 2)) , c("% || Level 1: ") , c(round((lv_1/matchesLen)*100, digits = 2)) , c("% || Level 2: ") , c(round((lv_2/matchesLen)*100, digits = 2)), c("% || Level 3: ") , c(round((lv_3/matchesLen)*100, digits = 2)), c("%."), sep = "")
+})
 
 
 
@@ -198,6 +208,10 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
     paste("Team", input$robot_numSearch)
   })
 
+  output$robot_skills_radar <- renderPlot({
+
+  })
+
   ####################
 ## EVENT SUMMARY TAB ##
   ###################
@@ -206,7 +220,7 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
   })
 
   output$event_skill_summary_plot <- renderPlot({
-    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Defense_Avg)) + geom_point(aes(size=Defense_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
+    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Endgame_Avg)) + geom_point(aes(size=Endgame_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
 
   })
 
@@ -218,7 +232,7 @@ df <-read.csv(file = "2019_03_03_HatboroEvent.csv", header = TRUE)
     c3 <- as.integer(input$cargo_3lvl_in)
     c2 <- as.integer(input$cargo_2lvl_in)
     c1 <- as.integer(input$cargo_1lvl_in)
-    
+
     x <- data.frame(C_on_3_Lev = c3, C_on_2_Lev = c2, C_on_1_Lev = c1, CS_C = as.integer(input$cargo_cs_in), CS_H = as.integer(input$hatch_cs_in), A_H_on_1_Lev = as.integer(input$ahatch_1lvl_in), A_CS_H = as.integer(input$ahatch_cs_in), H_on_3_Lev = as.integer(input$hatch_3lvl_in), H_on_2_Lev = as.integer(input$hatch_2lvl_in), H_on_1_Lev = as.integer(input$hatch_1lvl_in), Defense = as.integer(input$defense_) )
     p<- predict(mylogit,x)
     paste(round(p*100, digits = 2), "% chance of winning", sep = "")
