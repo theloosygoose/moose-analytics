@@ -229,23 +229,27 @@ ui <- fluidPage(theme = "main.css",
                 textInput(
                   inputId ="ahatch_cs_in", label = "Amount of Autonomous Cargo Ship Hatch", value = 0),
                 textInput(
-                  inputId ="cargo_1lvl_in", label = "Amount of Rocket Level 1 Cargo", value = 0),
-                textInput(
-                    inputId ="cargo_2lvl_in", label = "Amount of Rocket Level 2 Cargo", value = 0)
+                  inputId ="cargo_1lvl_in", label = "Amount of Rocket Level 1 Cargo", value = 0)
+               
 
 
          ),
          splitLayout(
                 textInput(
+                  inputId ="cargo_2lvl_in", label = "Amount of Rocket Level 2 Cargo", value = 0),
+                textInput(
                   inputId ="cargo_3lvl_in", label = "Amount of Rocket Level 3 Cargo", value = 0),
                 textInput(
                   inputId ="hatch_1lvl_in", label = "Amount of Rocket Level 1 Hatch", value = 0),
                 textInput(
-                  inputId ="hatch_2lvl_in", label = "Amount of Rocket Level 2 Hatch", value = 0),
-                textInput(
-                  inputId ="hatch_3lvl_in", label = "Amount of Rocket Level 3 Hatch", value = 0),
-                textInput(
-                  inputId ="cargo_cs_in", label = "Amount of Cargo Ship Cargo", value = 0),
+                  inputId ="hatch_2lvl_in", label = "Amount of Rocket Level 2 Hatch", value = 0)
+                
+                
+         ), splitLayout(
+           textInput(
+             inputId ="hatch_3lvl_in", label = "Amount of Rocket Level 3 Hatch", value = 0),
+           textInput(
+             inputId ="cargo_cs_in", label = "Amount of Cargo Ship Cargo", value = 0),
                 textInput(
                   inputId ="hatch_cs_in", label = "Amount of Cargo Ship Hatch", value = 0),
                 textInput(
@@ -262,7 +266,12 @@ ui <- fluidPage(theme = "main.css",
 
 
 
-         )
+         ),
+       fluidRow(
+         tags$h1("Summary"),
+         verbatimTextOutput("lin_reg_summ")
+         
+       )
 )
 
     )

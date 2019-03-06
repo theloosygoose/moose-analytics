@@ -15,7 +15,7 @@ server <- function(input, output){
 df <-read.csv(file = "event_data/2019_03_03_HatboroEvent.csv", header = TRUE)
 
 df[df=="?"] <- 0
-
+ 
 ##MAKING NEW COLUMNS IN THE DATAFRAME
   ##TOTAL HATCHES 32
   df$H_total <- df$H_on_3_Lev + df$H_on_2_Lev + df$H_on_1_Lev + df$CS_H
@@ -265,9 +265,12 @@ df[df=="?"] <- 0
 
     x <- data.frame(C_on_3_Lev = c3, C_on_2_Lev = c2, C_on_1_Lev = c1, CS_C = as.integer(input$cargo_cs_in), CS_H = as.integer(input$hatch_cs_in), A_H_on_1_Lev = as.integer(input$ahatch_1lvl_in), A_CS_H = as.integer(input$ahatch_cs_in), H_on_3_Lev = as.integer(input$hatch_3lvl_in), H_on_2_Lev = as.integer(input$hatch_2lvl_in), H_on_1_Lev = as.integer(input$hatch_1lvl_in), Defense = as.integer(input$defense_) )
     p<- predict(mylogit,x)
-    summary(mylogit)
-   # paste(round(p*100, digits = 2), "% chance of winning", sep = "")
+    paste(round(p*100, digits = 2), "% chance of winning", sep = "")
        # c(input$cargo_3lvl_in, input$cargo_2lvl_in, input$cargo_1lvl_in, input$cargo_cs_in, input$hatch_cs_in, input$ahatch_1lvl_in, input$ahatch_cs_in, input$hatch_3lvl_in, input$hatch_2lvl_in, input$hatch_1lvl_in, input$defense_)
+  })
+  output$lin_reg_summ <- renderPrint({
+    mylogit <- glm(W_L ~ C_on_3_Lev + C_on_2_Lev + C_on_1_Lev + CS_C + CS_H + A_H_on_1_Lev + A_CS_H + H_on_3_Lev + H_on_2_Lev + H_on_1_Lev + Defense, data = df, family = "binomial")
+    summary(mylogit)
   })
 
 }
