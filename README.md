@@ -1,5 +1,5 @@
 <h1>Moose Analytics v2.0</h1> <hr>
-a webapp created with R Shiny to show graphs and different data analytic function.
+A webapp created with R Shiny to show graphs and different data analytic function.
 Main app is coded in R in the ui.R file and the server.R files
 <br>
 <h3>Just Type in the Team Number!</h3><br>
