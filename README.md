@@ -3,7 +3,6 @@ a webapp created with R Shiny to show graphs and different data analytic functio
 Main app is coded in R in the ui.R file and the server.R files
 <br>
 <h3>Just Type in the Team Number!</h3><br>
-<hr>
 
 ![Alt Text](demo.gif)
 <br>
