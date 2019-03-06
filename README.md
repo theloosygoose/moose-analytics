@@ -3,7 +3,7 @@ a webapp created with R Shiny to show graphs and different data analytic functio
 Main app is coded in R in the app.R file
 <br>
 Just Type in the team number!
-<iframe src="https://giphy.com/embed/8FllEcZEV5RxDhLwGj" width="480" height="290" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/8FllEcZEV5RxDhLwGj">via GIPHY</a></p>
+![](demo.gif)
 
 <b>PACKAGES</b><br>
 <code>shiny</code><br>
