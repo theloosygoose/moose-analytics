@@ -5,6 +5,7 @@ library(dplyr)
 library(scales)
 library(tibble)
 library(fmsb)
+library(rsconnect)
 
 
 server <- function(input, output){
@@ -209,7 +210,15 @@ df[df=="?"] <- 0
   })
 
   output$robot_skills_radar <- renderPlot({
-
+    newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
+    newdf$Team <- NULL
+    newdf <- rbind(c(0,0,0,0), newdf)
+    newdf <- rbind(c(5,4,4,4), newdf)
+    radarchart(newdf, axistype = 2,
+               pcol=rgb(0.2,0.5,0.5,0.9) , pfcol=rgb(0.2,0.5,0.5,0.5), plwd = 3,
+               glcol="grey", cglty=1, axislabcol="red"
+    )
+    
   })
 
   ####################
@@ -235,7 +244,8 @@ df[df=="?"] <- 0
 
     x <- data.frame(C_on_3_Lev = c3, C_on_2_Lev = c2, C_on_1_Lev = c1, CS_C = as.integer(input$cargo_cs_in), CS_H = as.integer(input$hatch_cs_in), A_H_on_1_Lev = as.integer(input$ahatch_1lvl_in), A_CS_H = as.integer(input$ahatch_cs_in), H_on_3_Lev = as.integer(input$hatch_3lvl_in), H_on_2_Lev = as.integer(input$hatch_2lvl_in), H_on_1_Lev = as.integer(input$hatch_1lvl_in), Defense = as.integer(input$defense_) )
     p<- predict(mylogit,x)
-    paste(round(p*100, digits = 2), "% chance of winning", sep = "")
+    summary(mylogit)
+   # paste(round(p*100, digits = 2), "% chance of winning", sep = "")
        # c(input$cargo_3lvl_in, input$cargo_2lvl_in, input$cargo_1lvl_in, input$cargo_cs_in, input$hatch_cs_in, input$ahatch_1lvl_in, input$ahatch_cs_in, input$hatch_3lvl_in, input$hatch_2lvl_in, input$hatch_1lvl_in, input$defense_)
   })
 

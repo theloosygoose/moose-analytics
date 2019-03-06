@@ -1,4 +1,5 @@
-html, body{margin:0px; padding:0px;}
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+html, body{margin:0px; padding:0px;font-family: 'Open Sans', sans-serif;}
 
 body{
   margin: 0px;
@@ -7,10 +8,9 @@ body{
 }
 
 header{
-  text-align: center;
   font-size: 90px;
   color: white;
-  background-color: #fe465b;
+  background-color: #b23036;
   margin:0px;
   margin-bottom: 50px;
 }
@@ -22,8 +22,8 @@ header{
 }
 
 img {
-  justify-content: center;
   padding-bottom: 10px;
+  margin-left: 5%;
 }
 
 .container-fluid{
@@ -33,14 +33,24 @@ img {
 }
 
 .tabbable {
-  margin-right: 50px;
-  margin-left: 50px;
+  margin-right: 10%;
+  margin-left: 10%;
 }
 
-.main_search .shiny-bound-input{
-  padding: 20px;
-  font-size: 20px;
+.main_search{
+  text-align: center;
+  margin-right: 20%;
+  margin-top: 20px;
+  font-size: 40px;
+  float: right;
+}
+h1{
+  font-weight: 600;
 }
 h2 {
   padding-bottom: 10px;
+}
+
+.team_sum_header {
+  font-size: 100px;
 }

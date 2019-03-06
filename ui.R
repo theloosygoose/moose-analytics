@@ -5,9 +5,10 @@ library(dplyr)
 library(scales)
 library(tibble)
 library(fmsb)
+library(rsconnect)
 
 ui <- fluidPage(theme = "main.css",
-  tags$header(tags$img(src ="logo/logo.png", height ='150px;'),
+  tags$header(tags$img(src ="logo/bitmap.png", height ='150px;'),
   tags$div(class ="main_search",textInput(inputId ="robot_numSearch", label = "Team Number:"))
 ),
 
@@ -19,6 +20,9 @@ ui <- fluidPage(theme = "main.css",
       fluidRow(
         column(7,
           tags$h1(class='team_sum_header', textOutput("robot_num"))
+        ),
+        column(5,
+          plotOutput("robot_skills_radar")
         )
       )
     ),
@@ -36,7 +40,7 @@ ui <- fluidPage(theme = "main.css",
 
         ),
         column(4,
-          tags$h2("Match Number Played:"),
+          tags$h2("Start Points:"),
           verbatimTextOutput("teamMatches")
         ),
         column(4,
