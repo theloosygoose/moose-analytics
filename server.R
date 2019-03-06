@@ -7,15 +7,12 @@ library(tibble)
 library(fmsb)
 library(rsconnect)
 
-#rsconnect::deployApp()
-
-
 server <- function(input, output){
 
 df <-read.csv(file = "event_data/2019_03_03_HatboroEvent.csv", header = TRUE)
 
 df[df=="?"] <- 0
- 
+
 ##MAKING NEW COLUMNS IN THE DATAFRAME
   ##TOTAL HATCHES 32
   df$H_total <- df$H_on_3_Lev + df$H_on_2_Lev + df$H_on_1_Lev + df$CS_H
@@ -25,9 +22,10 @@ df[df=="?"] <- 0
 
   #Taking Means of Total Cargo
   summary_df <- aggregate(cbind(df$C_total, df$H_total,df$Defense, df$End_Point), by=list(Category=df$Robot_Num), FUN=mean)
-
+  #Making summary_df for EVENT TAB AND TEAM TAB
   names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg","Endgame_Avg")
 
+  #There is an Error where summary_df$Endgame_Avg added 4 to itself but this works to fix it
   summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
 
  ################################
@@ -109,7 +107,7 @@ df[df=="?"] <- 0
   output$rocket_Hatch_Text_total <- renderPrint({
     hatch_df <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,18,19,20)]
 
-    hatch_df$total_hatch_rocket <-  hatch_df$C_on_3_Lev + hatch_df$C_on_2_Lev + hatch_df$C_on_1_Lev
+    hatch_df$total_hatch_rocket <-  hatch_df$H_on_3_Lev + hatch_df$H_on_2_Lev + hatch_df$H_on_1_Lev
     hatch_df
   })
         #PLOT
@@ -224,7 +222,7 @@ df[df=="?"] <- 0
   output$robot_num <- renderText({
     paste("Team", input$robot_numSearch)
   })
-
+  #THE RADAR CHARTS OF GODS
   output$robot_skills_radar <- renderPlot({
     newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
     newdf$Team <- NULL
@@ -236,6 +234,7 @@ df[df=="?"] <- 0
 
   })
 
+#OUTPUT FOR SHOWING THE ROBOT Category
   output$robot_category <- renderText ({
     newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
 
@@ -245,10 +244,12 @@ df[df=="?"] <- 0
   ####################
 ## EVENT SUMMARY TAB ##
   ###################
+  # Plain output of the summary_df that was made at the top of the code
   output$event_skill_summary <- renderPrint({
     summary_df
   })
-
+  
+  #Scatter plot based on summary_df
   output$event_skill_summary_plot <- renderPlot({
     ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Endgame_Avg)) + geom_point(aes(size=Endgame_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
 
@@ -257,6 +258,8 @@ df[df=="?"] <- 0
     ################
   ## PREDICTION TAB ##
     ################
+
+  #SHOWING PERCENT WIN with inputs on UI.R
   output$total_w_l_corr <- renderPrint ({
     mylogit <- glm(W_L ~ C_on_3_Lev + C_on_2_Lev + C_on_1_Lev + CS_C + CS_H + A_H_on_1_Lev + A_CS_H + H_on_3_Lev + H_on_2_Lev + H_on_1_Lev + Defense, data = df, family = "binomial")
     c3 <- as.integer(input$cargo_3lvl_in)
@@ -268,6 +271,7 @@ df[df=="?"] <- 0
     paste(round(p*100, digits = 2), "% chance of winning", sep = "")
        # c(input$cargo_3lvl_in, input$cargo_2lvl_in, input$cargo_1lvl_in, input$cargo_cs_in, input$hatch_cs_in, input$ahatch_1lvl_in, input$ahatch_cs_in, input$hatch_3lvl_in, input$hatch_2lvl_in, input$hatch_1lvl_in, input$defense_)
   })
+  #SUMMARY FOR LINEAR REGRESSION
   output$lin_reg_summ <- renderPrint({
     mylogit <- glm(W_L ~ C_on_3_Lev + C_on_2_Lev + C_on_1_Lev + CS_C + CS_H + A_H_on_1_Lev + A_CS_H + H_on_3_Lev + H_on_2_Lev + H_on_1_Lev + Defense, data = df, family = "binomial")
     summary(mylogit)
