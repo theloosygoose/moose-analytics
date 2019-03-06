@@ -7,6 +7,10 @@ library(tibble)
 library(fmsb)
 library(rsconnect)
 
+
+#rsconnect::deployApp()
+
+
 ui <- fluidPage(theme = "main.css",
   tags$header(tags$img(src ="logo/bitmap.png", height ='150px;'),
   tags$div(class ="main_search",textInput(inputId ="robot_numSearch", label = "Team Number:"))
@@ -23,6 +27,9 @@ ui <- fluidPage(theme = "main.css",
         ),
         column(6,
           plotOutput("robot_skills_radar", width ='500px')
+        ),
+        column(6,
+          tags$h3(textOutput("robot_category"))
         )
       )
     ),

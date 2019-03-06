@@ -7,6 +7,8 @@ library(tibble)
 library(fmsb)
 library(rsconnect)
 
+#rsconnect::deployApp()
+
 
 server <- function(input, output){
 
@@ -69,17 +71,19 @@ df[df=="?"] <- 0
   })
         #PLOT
         output$A_cargoShip_Cargo_Line <- renderPlot({
-          A_cargoShip_Cargo_Line_data <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,13)]
-          ggplot(data = A_cargoShip_Cargo_Line_data, aes(x=A_CS_C)) + geom_bar() + ylim(0,3)
+          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,13,28)]
+          plotdata$Match_Num <- as.character(plotdata$Match_Num)
+          ggplot(data = plotdata, aes(x=Match_Num, y=A_CS_C, fill =W_L)) + geom_bar(stat="identity") + ylim(0,3) + scale_fill_gradient(low="red", high="lightgreen")
         })
-##Server-side for Sandstrom #Hatches# on CargoShip w/ match Number
+##Server-side for Sandstrom #Hatches on CargoShip w/ match Number
   output$A_cargoShip_Hatch_Text <- renderPrint({
     df[grep(input$robot_numSearch, df$Robot_Num),c(3,14)]
   })
         #PLOT
         output$A_cargoShip_Hatch_Line <- renderPlot({
-          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,14)]
-          ggplot(data = plotdata, aes(x=A_CS_H)) + geom_bar()  + ylim(0,3)
+          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,14,28)]
+          plotdata$Match_Num <- as.character(plotdata$Match_Num)
+          ggplot(data = plotdata, aes(x=Match_Num, y=A_CS_H, fill=W_L)) + geom_bar(stat="identity")  + ylim(0,3) + scale_fill_gradient(low="red", high="lightgreen")
         })
   ##################################
 ## TELE-OP INFORMATION ABOUT ROBOT ##
@@ -88,22 +92,32 @@ df[df=="?"] <- 0
 ##Server-side for TOTAL ROCKET DATA w/ match Number
   #CARGO
   output$rocket_Cargo_Text_total <- renderPrint({
-    df[grep(input$robot_numSearch, df$Robot_Num),c(3,15,16,17,33)]
+    cargo_df <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,15,16,17)]
+    cargo_df$total_cargo_rocket <-  cargo_df$C_on_3_Lev + cargo_df$C_on_2_Lev + cargo_df$C_on_1_Lev
+    cargo_df
   })
         #PLOT
         output$rocket_Cargo_Plot_total <- renderPlot({
-          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,15,16,17,33)]
-          ggplot(data = plotdata, aes(x=C_total)) + geom_bar() + ylim(0,6)
+          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,15,16,17,28)]
+
+          plotdata$rocket_C_total <- plotdata$C_on_3_Lev + plotdata$C_on_2_Lev + plotdata$C_on_1_Lev
+          plotdata$Match_Num <- as.character(plotdata$Match_Num)
+          ggplot(data = plotdata, aes(x=Match_Num, y=rocket_C_total, fill=W_L)) + geom_bar(stat="identity") + ylim(0,6)+ scale_fill_gradient(low="red", high="lightgreen")
         })
 
   #HATCH
   output$rocket_Hatch_Text_total <- renderPrint({
-    df[grep(input$robot_numSearch, df$Robot_Num),c(3,18,19,20,32)]
+    hatch_df <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,18,19,20)]
+
+    hatch_df$total_hatch_rocket <-  hatch_df$C_on_3_Lev + hatch_df$C_on_2_Lev + hatch_df$C_on_1_Lev
+    hatch_df
   })
         #PLOT
         output$rocket_Hatch_Plot_total <- renderPlot({
-          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,18,19,20,32)]
-          ggplot(data = plotdata, aes(x=H_total)) + geom_bar() + ylim(0,6)
+          plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,18,19,20,28)]
+          plotdata$rocket_H_total <- plotdata$H_on_3_Lev + plotdata$H_on_2_Lev + plotdata$H_on_1_Lev
+          plotdata$Match_Num <- as.character(plotdata$Match_Num)
+          ggplot(data = plotdata, aes(x=Match_Num, y=rocket_H_total, fill=W_L)) + geom_bar(stat="identity") + ylim(0,6) + scale_fill_gradient(low="red", high="lightgreen")
         })
 
 ##Server-side for TOTAL CARGO SHIP DATA w/ match Number
@@ -113,8 +127,9 @@ df[df=="?"] <- 0
   })
       #PLOT
       output$cargoship_Hatch_Plot_total <- renderPlot({
-        plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,22)]
-        ggplot(data = plotdata, aes(x=CS_H)) + geom_bar() + ylim(0,6)
+        plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,22,28)]
+        plotdata$Match_Num <- as.character(plotdata$Match_Num)
+        ggplot(data = plotdata, aes(x=Match_Num, y=CS_H, fill=W_L)) + geom_bar(stat="identity") + ylim(0,6) + scale_fill_gradient(low="red", high="lightgreen")
       })
   #CARGO 21
   output$cargoship_Cargo_Text_total <- renderPrint({
@@ -122,8 +137,9 @@ df[df=="?"] <- 0
   })
       #PLOT
       output$cargoship_Cargo_Plot_total <- renderPlot({
-        plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,21)]
-        ggplot(data = plotdata, aes(x=CS_C)) + geom_bar() + ylim(0,6)
+        plotdata <- df[grep(input$robot_numSearch, df$Robot_Num),c(3,21,28)]
+        plotdata$Match_Num <- as.character(plotdata$Match_Num)
+        ggplot(data = plotdata, aes(x=Match_Num, y=CS_C, fill=W_L)) + geom_bar(stat="identity") + ylim(0,6) + scale_fill_gradient(low="red", high="lightgreen")
       })
 
 ##Server-side for PICKUPS AREAS
@@ -216,10 +232,15 @@ df[df=="?"] <- 0
     newdf <- rbind(c(5,4,4,4), newdf)
     radarchart(newdf, axistype = 2,
                pcol='brown3', pfcol='brown3', plwd = 3,
-               cglcol="grey", cglty=1, axislabcol="grey", cglwd=2
-             )
+               cglcol="grey", cglty=1, axislabcol="grey", cglwd=2)
 
   })
+
+  output$robot_category <- renderText ({
+    newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
+
+  })
+
 
   ####################
 ## EVENT SUMMARY TAB ##
