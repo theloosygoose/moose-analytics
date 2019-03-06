@@ -18,11 +18,11 @@ ui <- fluidPage(theme = "main.css",
       ##################
     tabPanel("Team Summary",
       fluidRow(
-        column(7,
+        column(6,
           tags$h1(class='team_sum_header', textOutput("robot_num"))
         ),
-        column(5,
-          plotOutput("robot_skills_radar")
+        column(6,
+          plotOutput("robot_skills_radar", width ='500px')
         )
       )
     ),

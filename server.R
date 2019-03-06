@@ -215,10 +215,10 @@ df[df=="?"] <- 0
     newdf <- rbind(c(0,0,0,0), newdf)
     newdf <- rbind(c(5,4,4,4), newdf)
     radarchart(newdf, axistype = 2,
-               pcol=rgb(0.2,0.5,0.5,0.9) , pfcol=rgb(0.2,0.5,0.5,0.5), plwd = 3,
-               glcol="grey", cglty=1, axislabcol="red"
-    )
-    
+               pcol='brown3', pfcol='brown3', plwd = 3,
+               cglcol="grey", cglty=1, axislabcol="grey", cglwd=2
+             )
+
   })
 
   ####################
