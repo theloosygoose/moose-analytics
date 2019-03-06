@@ -2,9 +2,9 @@
 a webapp created with R Shiny to show graphs and different data analytic function.
 Main app is coded in R in the app.R file
 <br>
-Just Type in the team number!
-(demo.gif)
+Just Type in the team number!<br>
 
+![Alt Text](demo.gif)
 <b>PACKAGES</b><br>
 <code>shiny</code><br>
 <code>dplyr</code><br>
