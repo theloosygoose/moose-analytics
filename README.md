@@ -6,6 +6,7 @@ Main app is coded in R in the app.R file
 <hr>
 
 ![Alt Text](demo.gif)
+<br>
 <b>PACKAGES</b><br>
 <code>shiny</code><br>
 <code>dplyr</code><br>
