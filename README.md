@@ -24,6 +24,5 @@ https://mooseanalytics.shinyapps.io/webapp/
 Reading 2019_03_03_Hatboro.csv
 
 
-Last UPDATED March 6, 2019 <br>
-1:00pm <br>
+
 
