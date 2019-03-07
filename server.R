@@ -220,7 +220,11 @@ df[df=="?"] <- 0
   ###################
 
   output$robot_num <- renderText({
-    paste("Team", input$robot_numSearch)
+   if (!is.element(input$robot_numSearch, df$Robot_Num)) {
+      "Overall"
+    } else {
+      paste("Team", input$robot_numSearch)
+    }
   })
   #THE RADAR CHARTS OF GODS
   output$robot_skills_radar <- renderPlot({
