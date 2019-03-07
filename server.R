@@ -236,7 +236,24 @@ df[df=="?"] <- 0
 
 #OUTPUT FOR SHOWING THE ROBOT Category
   output$robot_category <- renderText ({
-    newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
+    newdf <- df[grep(input$robot_numSearch, df$Robot_Num),c(15,16,17,18,19,20,21,22,30)]
+    ##TOTAL HATCHES 32
+    H_total <- newdf$H_on_3_Lev + newdf$H_on_2_Lev + newdf$H_on_1_Lev + newdf$CS_H
+    #TOTAL CARGO 33
+    C_total <- newdf$C_on_3_Lev + newdf$C_on_2_Lev + newdf$C_on_1_Lev + newdf$CS_C
+    hatches <- sum(H_total)
+    cargo <- sum(C_total)
+    defense <- sum(newdf$Defense) / 2
+    
+    if (!is.element(input$robot_numSearch, df$Robot_Num)) {
+      ""
+    } else if (defense > cargo && defense > hatches) {
+      "Defensive Robot"
+    }else if (cargo > defense && cargo > hatches) {
+        "Cargo-Style Robot"
+    } else if (hatches > cargo && hatches > defense) {
+      "Hatch-Style Robot"
+    }
 
   })
 
