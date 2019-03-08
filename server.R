@@ -9,24 +9,60 @@ library(rsconnect)
 
 server <- function(input, output){
 
-df <-read.csv(file = "event_data/2019_03_03_HatboroEvent.csv", header = TRUE)
+df <-read.csv(file = "event_data/1640_Formatted_Data.csv", header = TRUE)
 
-df[df=="?"] <- 0
+## 1640 uses TRUE and FAlSE BOOL statements instead of ones and zeros, switches them to something that we can work with
+df[df==TRUE] <- 1
+df[df==FALSE] <- 0
 
-##MAKING NEW COLUMNS IN THE DATAFRAME
-  ##TOTAL HATCHES 32
-  df$H_total <- df$H_on_3_Lev + df$H_on_2_Lev + df$H_on_1_Lev + df$CS_H
-  #TOTAL CARGO 33
-  df$C_total <- df$C_on_3_Lev + df$C_on_2_Lev + df$C_on_1_Lev + df$CS_C
+# Total Columns in starting df 107
+# Formatting the data from Sandstorm into values that we can formatt and would be easier to select
+# Changing the data frame to match something that we had
+# Making vectors for all the column values
+
+  #######################
+## SANDSTORM DATA TOTALS ##
+  #######################
+df$SS_total_rocket_hatch <- df$SS-LR-Hatch-LH + df$SS-LR-Hatch-LM + df$SS-LR-Hatch-LL +
+                            df$SS-RR-Hatch-LH + df$SS-RR-Hatch-LM + df$SS-RR-Hatch-LL +
+                            df$SS-LR-Hatch-RH + df$SS-LR-Hatch-RM + df$SS-LR-Hatch-RL +
+                            df$SS-RR-Hatch-RH + df$SS-RR-Hatch-RM + df$SS-RR-Hatch-RL
+
+df$SS_total_rocket_cargo <- df$SS-LR-Cargo-H1 + df$SS-LR-Cargo-H2 + df$SS-LR-Cargo-M1 + df$SS-LR-Cargo-M2 + df$SS-LR-Cargo-L1 + df$SS-LR-Cargo-L2 +
+                            df$SS-RR-Cargo-H1 + df$SS-RR-Cargo-H2 + df$SS-RR-Cargo-M1 + df$SS-RR-Cargo-M2 + df$SS-RR-Cargo-L1 + df$SS-RR-Cargo-L2
+
+
+df$SS_total_CS_cargo <- df$SS-CS-Cargo-L3 + df$SS-CS-Cargo-L2 + df$SS-CS-Cargo-L1 + df$SS-CS-Cargo-FL +
+                        df$SS-CS-Cargo-R3 + df$SS-CS-Cargo-R2 + df$SS-CS-Cargo-R1 + df$SS-CS-Cargo-FR
+
+df$SS_total_CS_hatch <- df$SS-CS-Hatch-L3 + df$SS-CS-Hatch-L2 + df$SS-CS-Hatch-L1 + df$SS-CS-Hatch-FL +
+                        df$SS-CS-Hatch-R3 + df$SS-CS-Hatch-R2 + df$SS-CS-Hatch-R1 + df$SS-CS-Hatch-FR
+
+  #####################
+## TELEOP DATA TOATALS ##
+  #####################
+df$total_rocket_hatch <- df$LR-Hatch-LH + df$LR-Hatch-LM + df$LR-Hatch-LL +
+                         df$RR-Hatch-LH + df$RR-Hatch-LM + df$RR-Hatch-LL +
+                         df$LR-Hatch-RH + df$LR-Hatch-RM + df$LR-Hatch-RL +
+                         df$RR-Hatch-RH + df$RR-Hatch-RM + df$RR-Hatch-RL
+
+df$total_rocket_cargo <- df$LR-Cargo-H1 + df$LR-Cargo-H2 + df$LR-Cargo-M1 + df$LR-Cargo-M2 + df$LR-Cargo-L1 + df$LR-Cargo-L2 +
+                      df$RR-Cargo-H1 + df$RR-Cargo-H2 + df$RR-Cargo-M1 + df$RR-Cargo-M2 + df$RR-Cargo-L1 + df$RR-Cargo-L2
+
+df$total_CS_cargo <- df$CS-Cargo-L3 + df$CS-Cargo-L2 + df$CS-Cargo-L1 + df$CS-Cargo-FL +
+                     df$CS-Cargo-R3 + df$CS-Cargo-R2 + df$CS-Cargo-R1 + df$CS-Cargo-FR
+
+df$total_CS_hatch <- df$CS-Hatch-L3 + df$CS-Hatch-L2 + df$CS-Hatch-L1 + df$CS-Hatch-FL +
+                     df$CS-Hatch-R3 + df$CS-Hatch-R2 + df$CS-Hatch-R1 + df$CS-Hatch-FR
 
 
   #Taking Means of Total Cargo
-  summary_df <- aggregate(cbind(df$C_total, df$H_total,df$Defense, df$End_Point), by=list(Category=df$Robot_Num), FUN=mean)
+  #summary_df <- round(aggregate(cbind(df$C_total, df$H_total,df$Defense, df$End_Point), by=list(Category=df$Robot_Num), FUN=mean), digits = 2)
   #Making summary_df for EVENT TAB AND TEAM TAB
-  names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg","Endgame_Avg")
+  #names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg","Endgame_Avg")
 
   #There is an Error where summary_df$Endgame_Avg added 4 to itself but this works to fix it
-  summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
+  #summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
 
  ################################
 ## MISC. INFORMATION ABOUT ROBOT ##
@@ -248,7 +284,7 @@ df[df=="?"] <- 0
     hatches <- sum(H_total)
     cargo <- sum(C_total)
     defense <- sum(newdf$Defense) / 2
-    
+
     if (!is.element(input$robot_numSearch, df$Robot_Num)) {
       ""
     } else if (defense > cargo && defense > hatches) {
@@ -266,10 +302,10 @@ df[df=="?"] <- 0
 ## EVENT SUMMARY TAB ##
   ###################
   # Plain output of the summary_df that was made at the top of the code
-  output$event_skill_summary <- renderPrint({
+  output$event_skill_summary <- renderDT({
     summary_df
   })
-  
+
   #Scatter plot based on summary_df
   output$event_skill_summary_plot <- renderPlot({
     ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Endgame_Avg)) + geom_point(aes(size=Endgame_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
