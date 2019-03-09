@@ -98,15 +98,14 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 
 
 
-df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + df_1640$SS_total_rocket_cargo + df_1640$SS_total_rocket_hatch
+#df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + df_1640$SS_total_rocket_cargo + df_1640$SS_total_rocket_hatch
 
   #Taking Means of Total Cargo
- summary_df <- round(aggregate(cbind(df$Hatch_total, df$Cargo_total, df$Defensive_Success, df$Sandstorm_totals ,df$Level_Ended), by=list(Category=df$Team), FUN=mean), digits = 2)
+ summary_df <- round(aggregate(cbind(df$Hatch_total, df$Cargo_total, df$Defensive_Success, df$Efficient_Placing ,df$Level_Ended), by=list(Category=df$Team), FUN=mean), digits = 2)
 
- summary_df[is.null(summary_df)] <- 0
 
   #Making summary_df for EVENT TAB AND TEAM TAB
- names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Success_Avg", "SandStorm Avg", "Level Ended")
+ names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Success_Avg", "Efficient_Placing", "Level_Ended")
 
   #There is an Error where summary_df$Endgame_Avg added 4 to itself but this works to fix it
   #summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
@@ -317,8 +316,8 @@ df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + d
   output$robot_skills_radar <- renderPlot({
     newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
     newdf$Team <- NULL
-    newdf <- rbind(c(0,0,0,0,0,0), newdf)
-    newdf <- rbind(c(5,5,5,5,5,5), newdf)
+    newdf <- rbind(c(0,0,0,0,0), newdf)
+    newdf <- rbind(c(5,5,5,5,5), newdf)
     radarchart(newdf, axistype = 2,
                pcol='brown3', pfcol='brown3', plwd = 3,
                cglcol="grey", cglty=1, axislabcol="grey", cglwd=2)
@@ -327,21 +326,18 @@ df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + d
 
 #OUTPUT FOR SHOWING THE ROBOT Category
   output$robot_category <- renderText ({
-    newdf <- df[grep(input$robot_numSearch, df$Team),c(15,16,17,18,19,20,21,22,30)]
-    ##TOTAL HATCHES 32
-    H_total <- newdf$H_on_3_Lev + newdf$H_on_2_Lev + newdf$H_on_1_Lev + newdf$CS_H
-    #TOTAL CARGO 33
-    C_total <- newdf$C_on_3_Lev + newdf$C_on_2_Lev + newdf$C_on_1_Lev + newdf$CS_C
-    hatches <- sum(H_total)
-    cargo <- sum(C_total)
-    defense <- sum(newdf$Defense) / 2
+    summary_df <- summary_df[grep(input$robot_numSearch, df$Team),]
 
-    if (!is.element(input$robot_numSearch, df$Team)) {
+    hatches <- summary_df$Hatch_Avg
+    cargo <- summary_df$Cargo_Avg
+    defense <- summary_df$Defense_Success_Avg / 2
+
+    if (!is.element(input$robot_numSearch, summary_df$Team)) {
       ""
     } else if (defense > cargo && defense > hatches) {
       "Defensive Robot"
     }else if (cargo > defense && cargo > hatches) {
-        "Cargo-Style Robot"
+      "Cargo-Style Robot"
     } else if (hatches > cargo && hatches > defense) {
       "Hatch-Style Robot"
     }
@@ -359,7 +355,7 @@ df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + d
 
   #Scatter plot based on summary_df
   output$event_skill_summary_plot <- renderPlot({
-    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Endgame_Avg)) + geom_point(aes(size=Endgame_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
+    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Level_Ended)) + geom_point(aes(size=Level_Ended)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
 
   })
 
