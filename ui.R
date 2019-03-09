@@ -95,38 +95,8 @@ ui <- fluidPage(theme = "main.css",
           tags$h2("Total Hatch in Cargoship:"),
           verbatimTextOutput("cargoship_Hatch_Text_total")
         )
-      ),
-      tags$hr(),
-      fluidRow(
-        tags$h1("Cargo Pickup"),
-
-        column(3,
-          tags$h3("Depot"),
-          verbatimTextOutput("depot_Cargo_Text")
-        ),
-        column(3,
-          tags$h3("Ground"),
-          verbatimTextOutput("ground_Cargo_Text")
-        ),
-        column(3,
-          tags$h3("Loading Station"),
-          verbatimTextOutput("LS_Cargo_Text")
-        )
-       ),
-       tags$hr(),
-      fluidRow(
-        tags$h1("Hatch Pickup"),
-
-        column(3,
-          tags$h3("Ground"),
-          verbatimTextOutput("ground_Hatch_Text")
-        ),
-
-        column(3,
-          tags$h3("Loading Station"),
-          verbatimTextOutput("LS_Hatch_Text")
-        )
       )
+      
 
 
     ),
