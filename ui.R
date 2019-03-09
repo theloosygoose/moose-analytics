@@ -40,7 +40,7 @@ ui <- fluidPage(theme = "main.css",
       fluidRow(
         tags$h1("Misc."),
         column(4,
-          tags$h2("ScoutName"),
+          tags$h2("Scout Name/Initials"),
           verbatimTextOutput("scoutName")
 
         ),
@@ -53,7 +53,7 @@ ui <- fluidPage(theme = "main.css",
           verbatimTextOutput("startingitem_Text")
         ),
         column(4,
-          tags$h2("Defence Per 10 sec"),
+          tags$h2("Defence Rating:"),
           verbatimTextOutput("defence_Text")
         ),
         column(4,
