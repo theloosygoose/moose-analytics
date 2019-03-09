@@ -96,8 +96,6 @@ ui <- fluidPage(theme = "main.css",
           verbatimTextOutput("cargoship_Hatch_Text_total")
         )
       )
-      
-
 
     ),
 
