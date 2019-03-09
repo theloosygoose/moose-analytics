@@ -9,11 +9,11 @@ library(rsconnect)
 
 server <- function(input, output){
 
-df <-read.csv(file = "event_data/1640_Formatted_Data.csv", header = TRUE)
+df_1640 <-read.csv(file = "event_data/1640_Formatted_Data.csv", header = TRUE)
 
 ## 1640 uses TRUE and FAlSE BOOL statements instead of ones and zeros, switches them to something that we can work with
-df[df==TRUE] <- 1
-df[df==FALSE] <- 0
+df_1640[df_1640 == TRUE] <- 1
+df_1640[df_1640 == FALSE] <- 0
 
 # Total Columns in starting df 107
 # Formatting the data from Sandstorm into values that we can formatt and would be easier to select
@@ -23,46 +23,116 @@ df[df==FALSE] <- 0
   #######################
 ## SANDSTORM DATA TOTALS ##
   #######################
-df$SS_total_rocket_hatch <- df$SS-LR-Hatch-LH + df$SS-LR-Hatch-LM + df$SS-LR-Hatch-LL +
-                            df$SS-RR-Hatch-LH + df$SS-RR-Hatch-LM + df$SS-RR-Hatch-LL +
-                            df$SS-LR-Hatch-RH + df$SS-LR-Hatch-RM + df$SS-LR-Hatch-RL +
-                            df$SS-RR-Hatch-RH + df$SS-RR-Hatch-RM + df$SS-RR-Hatch-RL
 
-df$SS_total_rocket_cargo <- df$SS-LR-Cargo-H1 + df$SS-LR-Cargo-H2 + df$SS-LR-Cargo-M1 + df$SS-LR-Cargo-M2 + df$SS-LR-Cargo-L1 + df$SS-LR-Cargo-L2 +
-                            df$SS-RR-Cargo-H1 + df$SS-RR-Cargo-H2 + df$SS-RR-Cargo-M1 + df$SS-RR-Cargo-M2 + df$SS-RR-Cargo-L1 + df$SS-RR-Cargo-L2
+df_1640
+
+df_1640$SS_total_rocket_hatch <- df_1640$SS_LR_Hatch_LH + df_1640$SS_LR_Hatch_LM + df_1640$SS_LR_Hatch_LL +
+                                 df_1640$SS_RR_Hatch_LH + df_1640$SS_RR_Hatch_LM + df_1640$SS_RR_Hatch_LL +
+                                 df_1640$SS_LR_Hatch_RH + df_1640$SS_LR_Hatch_RM + df_1640$SS_LR_Hatch_RL +
+                                 df_1640$SS_RR_Hatch_RH + df_1640$SS_RR_Hatch_RM + df_1640$SS_RR_Hatch_RL
+
+df_1640$SS_total_rocket_cargo <- df_1640$SS_LR_Cargo_H1 + df_1640$SS_LR_Cargo_H2 + df_1640$SS_LR_Cargo_M1 + df_1640$SS_LR_Cargo_M2 + df_1640$SS_LR_Cargo_L1 + df_1640$SS_LR_Cargo_L2 +
+                                 df_1640$SS_RR_Cargo_H1 + df_1640$SS_RR_Cargo_H2 + df_1640$SS_RR_Cargo_M1 + df_1640$SS_RR_Cargo_M2 + df_1640$SS_RR_Cargo_L1 + df_1640$SS_RR_Cargo_L2
 
 
-df$SS_total_CS_cargo <- df$SS-CS-Cargo-L3 + df$SS-CS-Cargo-L2 + df$SS-CS-Cargo-L1 + df$SS-CS-Cargo-FL +
-                        df$SS-CS-Cargo-R3 + df$SS-CS-Cargo-R2 + df$SS-CS-Cargo-R1 + df$SS-CS-Cargo-FR
+df_1640$SS_total_CS_cargo <- df_1640$SS_CS_Cargo_L3 + df_1640$SS_CS_Cargo_L2 + df_1640$SS_CS_Cargo_L1 + df_1640$SS_CS_Cargo_FL +
+                             df_1640$SS_CS_Cargo_R3 + df_1640$SS_CS_Cargo_R2 + df_1640$SS_CS_Cargo_R1 + df_1640$SS_CS_Cargo_FR
 
-df$SS_total_CS_hatch <- df$SS-CS-Hatch-L3 + df$SS-CS-Hatch-L2 + df$SS-CS-Hatch-L1 + df$SS-CS-Hatch-FL +
-                        df$SS-CS-Hatch-R3 + df$SS-CS-Hatch-R2 + df$SS-CS-Hatch-R1 + df$SS-CS-Hatch-FR
+
+df_1640$SS_total_CS_hatch <- df_1640$SS_CS_Hatch_L3 + df_1640$SS_CS_Hatch_L2 + df_1640$SS_CS_Hatch_L1 + df_1640$SS_CS_Hatch_FL +
+                             df_1640$SS_CS_Hatch_R3 + df_1640$SS_CS_Hatch_R2 + df_1640$SS_CS_Hatch_R1 + df_1640$SS_CS_Hatch_FR
 
   #####################
 ## TELEOP DATA TOATALS ##
   #####################
-df$total_rocket_hatch <- df$LR-Hatch-LH + df$LR-Hatch-LM + df$LR-Hatch-LL +
-                         df$RR-Hatch-LH + df$RR-Hatch-LM + df$RR-Hatch-LL +
-                         df$LR-Hatch-RH + df$LR-Hatch-RM + df$LR-Hatch-RL +
-                         df$RR-Hatch-RH + df$RR-Hatch-RM + df$RR-Hatch-RL
 
-df$total_rocket_cargo <- df$LR-Cargo-H1 + df$LR-Cargo-H2 + df$LR-Cargo-M1 + df$LR-Cargo-M2 + df$LR-Cargo-L1 + df$LR-Cargo-L2 +
-                      df$RR-Cargo-H1 + df$RR-Cargo-H2 + df$RR-Cargo-M1 + df$RR-Cargo-M2 + df$RR-Cargo-L1 + df$RR-Cargo-L2
+df_1640$total_rocket_hatch <- df_1640$LR_Hatch_LH + df_1640$LR_Hatch_LM + df_1640$LR_Hatch_LL +
+                              df_1640$RR_Hatch_LH + df_1640$RR_Hatch_LM + df_1640$RR_Hatch_LL +
+                              df_1640$LR_Hatch_RH + df_1640$LR_Hatch_RM + df_1640$LR_Hatch_RL +
+                              df_1640$RR_Hatch_RH + df_1640$RR_Hatch_RM + df_1640$RR_Hatch_RL
 
-df$total_CS_cargo <- df$CS-Cargo-L3 + df$CS-Cargo-L2 + df$CS-Cargo-L1 + df$CS-Cargo-FL +
-                     df$CS-Cargo-R3 + df$CS-Cargo-R2 + df$CS-Cargo-R1 + df$CS-Cargo-FR
+df_1640$total_rocket_cargo <- df_1640$LR_Cargo_H1 + df_1640$LR_Cargo_H2 + df_1640$LR_Cargo_M1 + df_1640$LR_Cargo_M2 + df_1640$LR_Cargo_L1 + df_1640$LR_Cargo_L2 +
+                              df_1640$RR_Cargo_H1 + df_1640$RR_Cargo_H2 + df_1640$RR_Cargo_M1 + df_1640$RR_Cargo_M2 + df_1640$RR_Cargo_L1 + df_1640$RR_Cargo_L2
 
-df$total_CS_hatch <- df$CS-Hatch-L3 + df$CS-Hatch-L2 + df$CS-Hatch-L1 + df$CS-Hatch-FL +
-                     df$CS-Hatch-R3 + df$CS-Hatch-R2 + df$CS-Hatch-R1 + df$CS-Hatch-FR
+df_1640$total_CS_cargo <- df_1640$CS_Cargo_L3 + df_1640$CS_Cargo_L2 + df_1640$CS_Cargo_L1 + df_1640$CS_Cargo_FL +
+                          df_1640$CS_Cargo_R3 + df_1640$CS_Cargo_R2 + df_1640$CS_Cargo_R1 + df_1640$CS_Cargo_FR
 
+df_1640$total_CS_hatch <- df_1640$CS_Hatch_L3 + df_1640$CS_Hatch_L2 + df_1640$CS_Hatch_L1 + df_1640$CS_Hatch_FL +
+                          df_1640$CS_Hatch_R3 + df_1640$CS_Hatch_R2 + df_1640$CS_Hatch_R1 + df_1640$CS_Hatch_FR
+
+
+                          ##############
+  ############################################################
+## NEW DF BASED ON 1640s DATA BUT FORMATTED AND DULLED FOR APP ##
+  ############################################################
+
+
+  ################
+## SANDSTORM DATA ##
+  ################
+
+df_1640$SS_rocket_Lev_3_hatch <- df_1640$SS_RR_Hatch_RH + df_1640$SS_RR_Hatch_LH + df_1640$SS_LR_Hatch_RH + df_1640$SS_LR_Hatch_LH
+df_1640$SS_rocket_Lev_2_hatch <- df_1640$SS_RR_Hatch_RM + df_1640$SS_RR_Hatch_LM + df_1640$SS_LR_Hatch_RM + df_1640$SS_LR_Hatch_LM
+df_1640$SS_rocket_Lev_1_hatch <- df_1640$SS_RR_Hatch_RL + df_1640$SS_RR_Hatch_LL + df_1640$SS_LR_Hatch_RL + df_1640$SS_LR_Hatch_LL
+
+df_1640$SS_rocket_Lev_3_cargo <- df_1640$SS_RR_Cargo_H1 + df_1640$SS_RR_Cargo_H2 + df_1640$SS_LR_Cargo_H1 + df_1640$SS_LR_Cargo_H2
+df_1640$SS_rocket_Lev_2_cargo <- df_1640$SS_RR_Cargo_M1 + df_1640$SS_RR_Cargo_M2 + df_1640$SS_LR_Cargo_M1 + df_1640$SS_LR_Cargo_M2
+df_1640$SS_rocket_Lev_1_cargo <- df_1640$SS_RR_Cargo_L1 + df_1640$SS_RR_Cargo_L2 + df_1640$SS_LR_Cargo_L1 + df_1640$SS_LR_Cargo_L2
+
+df_1640$SS_total_rocket_hatch <- df_1640$SS_total_rocket_hatch
+df_1640$SS_total_rocket_cargo <- df_1640$SS_total_rocket_cargo
+
+df_1640$SS_total_CS_cargo <- df_1640$SS_total_CS_cargo
+df_1640$SS_total_CS_hatch <- df_1640$SS_total_CS_hatch
+
+
+  ##############
+## TELE-OP DATA ##
+  #############
+
+df_1640$rocket_Lev_3_hatch <-  df_1640$RR_Hatch_RH + df_1640$RR_Hatch_LH + df_1640$LR_Hatch_RH + df_1640$LR_Hatch_LH
+df_1640$rocket_Lev_2_hatch <-  df_1640$RR_Hatch_RM + df_1640$RR_Hatch_LM + df_1640$LR_Hatch_RM + df_1640$LR_Hatch_LM
+df_1640$rocket_Lev_1_hatch <-  df_1640$RR_Hatch_RL + df_1640$RR_Hatch_LL + df_1640$LR_Hatch_RL + df_1640$LR_Hatch_LL
+
+df_1640$rocket_Lev_3_cargo <-  df_1640$RR_Cargo_H1 + df_1640$RR_Cargo_H2 + df_1640$LR_Cargo_H1 + df_1640$LR_Cargo_H2
+df_1640$rocket_Lev_2_cargo <-  df_1640$RR_Cargo_M1 + df_1640$RR_Cargo_M2 + df_1640$LR_Cargo_M1 + df_1640$LR_Cargo_M2
+df_1640$rocket_Lev_1_cargo <-  df_1640$RR_Cargo_L1 + df_1640$RR_Cargo_L2 + df_1640$LR_Cargo_L1 + df_1640$LR_Cargo_L2
+
+df_1640$CS_F_Cargo <- df_1640$CS_Cargo_FL + df_1640$CS_Cargo_FR
+df_1640$CS_F_Hatch <- df_1640$CS_Hatch_FL + df_1640$CS_Hatch_FR
+
+df_1640$total_hatch_rocket <- df_1640$total_hatch_rocket
+df_1640$total_cargo_rocket <- df_1640$total_cargo_rocket
+
+df_1640$total_CS_cargo <- df_1640$total_CS_cargo
+df_1640$total_CS_hatch <- df_1640$total_CS_hatch
+
+  ###################
+## ENDGAME AND MISC. ##
+  ###################
+
+df_1640$general.rating <- df_1640$General.Success
+
+df_1640$efficiency <- df_1640$Efficient.Placing
+
+df_1640$defense_score <- df_1640$Defensive.Success
+df_1640$success.v.defense <- df_1640$Success.v.Defense
+
+
+df <- subset(df_1640, select=c("Match", "Pos", "Team", "Scout Initials", "Is Present", "Starting Loc", "Piece Holding",
+                              "SS_rocket_Lev_3_hatch", "SS_rocket_Lev_2_hatch", "SS_rocket_Lev_1_hatch", "SS_rocket_Lev_3_cargo", "SS_rocket_Lev_2_cargo", "SS_rocket_Lev_1_cargo", "SS_total_rocket_hatch", "SS_total_rocket_cargo", "SS_Feeder_L","SS_Feeder_R",
+                              "rocket_Lev_3_hatch", "rocket_Lev_2_hatch", "rocket_Lev_1_hatch", "rocket_Lev_3_cargo","rocket_Lev_2_cargo","rocket_Lev_1_cargo", "total_hatch_rocket","total_cargo_rocket", "CS_F_Cargo", "CS_F_Hatch", "total_CS_cargo", "total_CS_hatch",
+                              "General Success", "Efficient Placing", "Defensive Success", "Success v Defense"))
 
   #Taking Means of Total Cargo
-  #summary_df <- round(aggregate(cbind(df$C_total, df$H_total,df$Defense, df$End_Point), by=list(Category=df$Robot_Num), FUN=mean), digits = 2)
-  #Making summary_df for EVENT TAB AND TEAM TAB
-  #names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg","Endgame_Avg")
+  summary_df <- round(aggregate(cbind(df$C_total, df$H_total,df$Defense, df$End_Point), by=list(Category=df$Robot_Num), FUN=mean), digits = 2)
+  Making summary_df for EVENT TAB AND TEAM TAB
+  names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Avg","Endgame_Avg")
 
   #There is an Error where summary_df$Endgame_Avg added 4 to itself but this works to fix it
   #summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
+
+
 
  ################################
 ## MISC. INFORMATION ABOUT ROBOT ##
