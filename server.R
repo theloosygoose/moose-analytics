@@ -89,8 +89,8 @@ df_1640$Hatch_total <- df_1640$total_CS_hatch + df_1640$rocket_Lev_3_hatch + df_
 df_1640$Cargo_total <- df_1640$total_CS_cargo + df_1640$rocket_Lev_3_cargo + df_1640$rocket_Lev_2_cargo + df_1640$rocket_Lev_1_cargo
 
 
-
-df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Loc", "SS_rocket_Lev_3_cargo", "SS_rocket_Lev_2_cargo", "SS_rocket_Lev_1_cargo", "SS_rocket_Lev_3_hatch", "SS_rocket_Lev_2_hatch", "SS_rocket_Lev_1_hatch", "SS_total_rocket_hatch", "SS_total_rocket_cargo", "SS_total_CS_cargo", "SS_total_CS_cargo",
+              
+df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Loc","Piece_Holding", "SS_rocket_Lev_3_cargo", "SS_rocket_Lev_2_cargo", "SS_rocket_Lev_1_cargo", "SS_rocket_Lev_3_hatch", "SS_rocket_Lev_2_hatch", "SS_rocket_Lev_1_hatch", "SS_total_rocket_hatch", "SS_total_rocket_cargo", "SS_total_CS_cargo", "SS_total_CS_hatch",
                                  "rocket_Lev_3_hatch", "rocket_Lev_2_hatch", "rocket_Lev_1_hatch", "rocket_Lev_3_cargo", "rocket_Lev_2_cargo", "rocket_Lev_1_cargo",
                                  "total_rocket_hatch", "total_rocket_cargo", "total_CS_hatch", "total_CS_cargo", "Hatch_total", "Cargo_total",
                                  "Feeder_L", "Feeder_R", "Level_Ended", "General_Success", "Defensive_Success", "Success_v_Defense", "Efficient_Placing", "Dropped_Pieces"
@@ -98,14 +98,15 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 
 
 
-#df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + df_1640$SS_total_rocket_cargo + df_1640$SS_total_rocket_hatch
+df$Sandstorm_totals <- df_1640$SS_total_CS_cargo + df_1640$SS_total_CS_hatch + df_1640$SS_total_rocket_cargo + df_1640$SS_total_rocket_hatch
 
   #Taking Means of Total Cargo
- summary_df <- round(aggregate(cbind(df$Hatch_total, df$Cargo_total, df$Defensive_Success, df$Efficient_Placing ,df$Level_Ended), by=list(Category=df$Team), FUN=mean), digits = 2)
+ summary_df <- round(aggregate(cbind(df$Hatch_total, df$Cargo_total, df$Defensive_Success, df$Sandstorm_totals ,df$Level_Ended), by=list(Category=df$Team), FUN=mean), digits = 2)
 
+ summary_df[is.null(summary_df)] <- 0
 
   #Making summary_df for EVENT TAB AND TEAM TAB
- names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Success_Avg", "Efficient_Placing", "Level_Ended")
+ names(summary_df) <- c("Team", "Cargo_Avg", "Hatch_Avg", "Defense_Success_Avg", "SandStorm Avg", "Level Ended")
 
   #There is an Error where summary_df$Endgame_Avg added 4 to itself but this works to fix it
   #summary_df$Endgame_Avg <- summary_df$Endgame_Avg - 4
@@ -118,16 +119,19 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 
 ##Server-side for STARTING ITEM :: STARTING ITEM
   output$startingitem_Text <- renderPrint({
-    df[grep(input$robot_numSearch, df$Team),c(3,31)]
+    newdf <- df[grep(input$robot_numSearch, df$Team),c(1,5)]
+    newdf$Piece_Holding[newdf$Piece_Holding == 0] <- "H"
+    newdf$Piece_Holding[newdf$Piece_Holding == 1] <- "C"
+    newdf
   })
 
 ##Server-side for DEFENCE RANK AND SCORE
   output$defence_Text <- renderPrint({
-    df[grep(input$robot_numSearch, df$Team),c(3,30)]
+    df[grep(input$robot_numSearch, df$Team),c(1,32)]
   })
 ##Server-side for ENDING POINT
   output$endpoint_Text <- renderPrint({
-    df[grep(input$robot_numSearch, df$Team),c(3,29)]
+    df[grep(input$robot_numSearch, df$Team),c(1,30)]
   })
 
 
@@ -135,13 +139,13 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 #Server-Side for Finding who scouted the robot and at what match number
 
   output$scoutName <- renderPrint({
-    df[grep(input$robot_numSearch, df$Team),c(1,3)]
+    df[grep(input$robot_numSearch, df$Team),c(1,2)]
   })
 
 #Server-Side for Finding starting points and match number
   output$teamMatches <- renderPrint({
-    row.names(df[grep(input$robot_numSearch, df$Team),c(3,5)]) <- NULL
-    df[grep(input$robot_numSearch, df$Team),c(3,5)]
+    row.names(df[grep(input$robot_numSearch, df$Team),c(1,4)]) <- NULL
+    df[grep(input$robot_numSearch, df$Team),c(1,4)]
   })
 
 
@@ -151,7 +155,7 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 
 #Server-Side for Sandstorm #Cargo# on CargoShip w/ match Number
   output$A_cargoShip_Cargo_Text <- renderPrint({
-    df[grep(input$robot_numSearch, df$Team),c(3,13)]
+    df[grep(input$robot_numSearch, df$Team),c(1,14)]
   })
         #PLOT
         output$A_cargoShip_Cargo_Line <- renderPlot({
@@ -161,7 +165,7 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
         })
 ##Server-side for Sandstrom #Hatches on CargoShip w/ match Number
   output$A_cargoShip_Hatch_Text <- renderPrint({
-    df[grep(input$robot_numSearch, df$Team),c(3,14)]
+    df[grep(input$robot_numSearch, df$Team),c(1,15)]
   })
         #PLOT
         output$A_cargoShip_Hatch_Line <- renderPlot({
@@ -176,15 +180,14 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 ##Server-side for TOTAL ROCKET DATA w/ match Number
   #CARGO
   output$rocket_Cargo_Text_total <- renderPrint({
-    cargo_df <- df[grep(input$robot_numSearch, df$Team),c(3,15,16,17)]
-    cargo_df$total_cargo_rocket <-  cargo_df$C_on_3_Lev + cargo_df$C_on_2_Lev + cargo_df$C_on_1_Lev
-    cargo_df
+   df[grep(input$robot_numSearch, df$Team),c(1,23)]
+    
   })
         #PLOT
         output$rocket_Cargo_Plot_total <- renderPlot({
-          plotdata <- df[grep(input$robot_numSearch, df$Team),c(3,15,16,17,28)]
+          plotdata <- df[grep(input$robot_numSearch, df$Team),c(1,23)]
 
-          plotdata$rocket_C_total <- plotdata$C_on_3_Lev + plotdata$C_on_2_Lev + plotdata$C_on_1_Lev
+          
           plotdata$Match_Num <- as.character(plotdata$Match_Num)
           ggplot(data = plotdata, aes(x=Match_Num, y=rocket_C_total, fill=W_L)) + geom_bar(stat="identity") + ylim(0,6)+ scale_fill_gradient(low="red", high="lightgreen")
         })
@@ -316,8 +319,8 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
   output$robot_skills_radar <- renderPlot({
     newdf <- summary_df[grep(input$robot_numSearch, summary_df$Team),]
     newdf$Team <- NULL
-    newdf <- rbind(c(0,0,0,0,0), newdf)
-    newdf <- rbind(c(5,5,5,5,5), newdf)
+    newdf <- rbind(c(0,0,0,0,0,0), newdf)
+    newdf <- rbind(c(5,5,5,5,5,5), newdf)
     radarchart(newdf, axistype = 2,
                pcol='brown3', pfcol='brown3', plwd = 3,
                cglcol="grey", cglty=1, axislabcol="grey", cglwd=2)
@@ -326,18 +329,21 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 
 #OUTPUT FOR SHOWING THE ROBOT Category
   output$robot_category <- renderText ({
-    summary_df <- summary_df[grep(input$robot_numSearch, df$Team),]
+    newdf <- df[grep(input$robot_numSearch, df$Team),c(15,16,17,18,19,20,21,22,30)]
+    ##TOTAL HATCHES 32
+    H_total <- newdf$H_on_3_Lev + newdf$H_on_2_Lev + newdf$H_on_1_Lev + newdf$CS_H
+    #TOTAL CARGO 33
+    C_total <- newdf$C_on_3_Lev + newdf$C_on_2_Lev + newdf$C_on_1_Lev + newdf$CS_C
+    hatches <- sum(H_total)
+    cargo <- sum(C_total)
+    defense <- sum(newdf$Defense) / 2
 
-    hatches <- summary_df$Hatch_Avg
-    cargo <- summary_df$Cargo_Avg
-    defense <- summary_df$Defense_Success_Avg / 2
-
-    if (!is.element(input$robot_numSearch, summary_df$Team)) {
+    if (!is.element(input$robot_numSearch, df$Team)) {
       ""
     } else if (defense > cargo && defense > hatches) {
       "Defensive Robot"
     }else if (cargo > defense && cargo > hatches) {
-      "Cargo-Style Robot"
+        "Cargo-Style Robot"
     } else if (hatches > cargo && hatches > defense) {
       "Hatch-Style Robot"
     }
@@ -355,7 +361,7 @@ df <- subset(df_1640, select = c("Match", "Scout_Initials", "Team", "Starting_Lo
 
   #Scatter plot based on summary_df
   output$event_skill_summary_plot <- renderPlot({
-    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Level_Ended)) + geom_point(aes(size=Level_Ended)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
+    ggplot(summary_df, aes(x=Cargo_Avg, y=Hatch_Avg, label=Team, color=Endgame_Avg)) + geom_point(aes(size=Endgame_Avg)) +geom_text(color ="darkgreen", aes(label=Team),hjust=0, vjust=0) + scale_color_gradient(low="red", high="lightgreen")
 
   })
 
