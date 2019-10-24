@@ -7,6 +7,7 @@ Main app is coded in R in the ui.R file and the server.R files
 <h4>Website Link:</h4> <br>
 https://mooseanalytics.shinyapps.io/webapp/
 <hr>
+
 ## Just Type in the FIRST Robotics Team Number
 
 ![Alt Text](demo.gif)
