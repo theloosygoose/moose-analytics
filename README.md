@@ -7,11 +7,12 @@ Main app is coded in R in the ui.R file and the server.R files
 <h4>Website Link:</h4> <br>
 https://mooseanalytics.shinyapps.io/webapp/
 <hr>
-<h3>Just Type in the Team Number!</h3><br>
+## Just Type in the FIRST Robotics Team Number
 
 ![Alt Text](demo.gif)
 <br>
-<b>PACKAGES</b><br>
+
+### Packages
 <code>shiny</code><br>
 <code>dplyr</code><br>
 <code>DT</code><br>
@@ -19,9 +20,6 @@ https://mooseanalytics.shinyapps.io/webapp/
 <code>fmsb</code><br>
 <code>tibble</code><br>
 
-
-<br>
-Reading 2019_03_03_Hatboro.csv
 
 
 
